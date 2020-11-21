@@ -1,17 +1,40 @@
-const http = require('http');
-const port = process.argv[2]
+const net = require('net')
+const fs = require ('fs');
+let userExist = 0
+const userFile = fs.readFileSync('/Users/adlaneould/Desktop/Efrei/Node/CodeFlix/onecode/cb-myFtp/connexion.json','utf8')
+const userInfos = JSON.parse(userFile)
 
-if (!port) {
-  console.log("Usage : node e01.js <PORT> ") // si le port n'est pas renseigner.
-  process.exit(0)
-}
-const requestListener = function (req, res) {
-  res.writeHead(200);
-  //res.end('<html><h1>Hello, World!</h1><html>');
+const server = net.createServer((socket) => {
+  console.log('new connection')
+
+  socket.on('data', (data) => {
+    const [directive, parameter] = data.toString().split(' ')         //directive correspond au 1er Terme (Command) le second Terme correspond au parametre.
+    console.log(parameter);
+    switch(directive) {
+        case 'USER':
+          for (let i = 0; i < userInfos.length; i++) {
+            const element = userInfos[i];
+            if (element.userName === parameter) {
+                    userExist = 1
+            }
+        }            
+        if (userExist === 0) {
+            socket.write("You do not exist in our System. What Happened ?");
+
+        }if (userExist === 1) {
+            socket.write("Congratulation you Exist !");                       
+                
+        }
+            break;
+        case 'PASS' : 
+    }
+                  
+  })
 
 
-  
-}
+  socket.write('Hello from server')
+})
 
-const server = http.createServer(requestListener);
-server.listen(port);
+server.listen(5000, () => {
+  console.log('Server started at port 5000')
+})
