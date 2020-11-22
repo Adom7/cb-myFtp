@@ -9,18 +9,15 @@ const rl = readline.createInterface({
 });
 client.connect(5000, '127.0.0.1', () => {
   console.log('connected')
-    rl.question('Please enter your username like this : USER <username> \n',(username)=> {
-        client.write(username)
-        rl.close()
-    
-    });
-    rl.question('Please enter your password like this : PASS <password> \n ',(password)=>{
-        client.write(password)
-        rl.close()
-    });
 
-})
+        rl.on('line', (request) =>[
+            client.write(request)
+           ])
+    });
 
 client.on('data', (data) => {
   console.log(data.toString())
+})
+client.on("end", (data)=>{
+    process.exit(0)
 })

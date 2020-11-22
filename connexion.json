@@ -1,10 +1,10 @@
 [
     { 
           "userName":"Test", 
-          "password":"mdp"
+          "passWord":"mdp"
       },
       {
           "userName":"ad",
-          "password":"ad"
+          "passWord":"ad"
       }
   ]
