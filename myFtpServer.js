@@ -7,7 +7,6 @@ let userConnected = 0
 let password = null
 let username = null
 const dirList = fs.readdirSync(__dirname , "utf-8")
-let fileCopyFromServer = null
 
 const server = net.createServer((socket) => {
   console.log('new connection')
@@ -71,8 +70,7 @@ const server = net.createServer((socket) => {
             if (userConnected === 0) {
               socket.write('You have to be connected to have access to this command !')
             }else if (userConnected === 1 ) {
-              fileCopyFromServer = fs.readFileSync(parameter)
-              socket.emit('retr',(fileCopyFromServer)=>{});
+              socket.write(fs.readFileSync(parameter,"utf-8"))
             }
           break;
 
@@ -80,7 +78,7 @@ const server = net.createServer((socket) => {
             if (userConnected === 0) {
               socket.write('You have to be connected to have access to this command !')
             }else if (userConnected === 1 ) {
-              socket.write();
+              console.log(fs.readFileSync(parameter,"utf-8"));
             }
           break;
 
