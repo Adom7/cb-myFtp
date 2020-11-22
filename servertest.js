@@ -10,22 +10,16 @@ const server = net.createServer((socket) => {
   socket.on('data', (data) => {
     const [directive, parameter] = data.toString().split(' ')         //directive correspond au 1er Terme (Command) le second Terme correspond au parametre.
     console.log(parameter);
-    if (directive === 'USER'){
-        
-    
-          for (let i = 0; i < userInfos.length; i++) {
-            const element = userInfos[i];
-            if (element.userName === parameter) {
-                    userExist = 1
-            }
-        }            
-        if (userExist === 0) {
-            socket.write("You do not exist in our System. What Happened ?");
-
-        }else if (userExist === 1) {
-            socket.write("Congratulation you Exist !");                       
-                
-        }
+    switch (directive) {
+        case 'CWD':
+            try {
+                process.chdir(parameter);
+                socket.write(`New directory: ${process.cwd()}`);
+              } catch (err) {
+                socket.write((`chdir: ${err}`));
+              }
+            
+          break;
     }
                   
   })

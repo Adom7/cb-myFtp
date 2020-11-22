@@ -1,3 +1,4 @@
+const fs = require('fs');
 const net = require('net')
 const readline = require ('readline')
 const client = new net.Socket()
@@ -13,6 +14,7 @@ client.connect(5000, '127.0.0.1', () => {
         rl.on('line', (request) =>[
             client.write(request)
            ])
+           
     });
 
 client.on('data', (data) => {

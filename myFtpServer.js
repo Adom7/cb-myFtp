@@ -7,6 +7,7 @@ let userConnected = 0
 let password = null
 let username = null
 const dirList = fs.readdirSync(__dirname , "utf-8")
+let fileCopyFromServer = null
 
 const server = net.createServer((socket) => {
   console.log('new connection')
@@ -57,7 +58,12 @@ const server = net.createServer((socket) => {
             if (userConnected === 0) {
               socket.write('You have to be connected to have access to this command !')
             }else if (userConnected === 1 ) {
-              socket.write();
+              try {
+                process.chdir(parameter);
+                socket.write(`New directory: ${process.cwd()}`);
+              } catch (err) {
+                socket.write((`chdir: ${err}`));
+              }
             }
           break;
 
@@ -65,7 +71,8 @@ const server = net.createServer((socket) => {
             if (userConnected === 0) {
               socket.write('You have to be connected to have access to this command !')
             }else if (userConnected === 1 ) {
-              socket.write();
+              fileCopyFromServer = fs.readFileSync(parameter)
+              socket.emit('retr',(fileCopyFromServer)=>{});
             }
           break;
 
